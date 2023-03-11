@@ -9,3 +9,4 @@ export const authConfig = {
   clientId: 'YqxFW3ZIyVsjSfBmiXi7XbAnNwwlRfiM', // Auth0 client id
   callbackUrl: 'http://localhost:3000/callback'
 }
+

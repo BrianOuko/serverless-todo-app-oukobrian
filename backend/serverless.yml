@@ -15,7 +15,7 @@ provider:
   runtime: nodejs12.x
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
-  
+
 #  X-Ray Tracing
   tracing: 
     lambda: true
@@ -25,6 +25,8 @@ provider:
     PROJECT_NAME: serverless-todo-app
     TODOS_TABLE: Todos-${self:provider.stage}
     S3_BUCKET_NAME: serverless-c4-udacity-oukobrian-${self:provider.stage}
+    AWS_XRAY_SDK_ENABLED: 'true'
+    DYNAMODB_XRAY_TRACING_ENABLED: 'true'
 
 custom:
   documentation:
@@ -33,7 +35,17 @@ custom:
         version: v1.0.0
         title: project4 API
         description: Serverless application for managing Todos
-          
+  
+  webpack:
+      includeModules:
+        forceExclude:
+          - aws-sdk
+    
+  tracing:
+    lambda: true
+    apiGateway: true
+    plugins:
+      - serverless-plugin-tracing
 
 functions:
 
@@ -59,6 +71,7 @@ functions:
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
         Resource: 
           - '*'
 
@@ -85,6 +98,7 @@ functions:
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
         Resource: 
           - '*'
 
@@ -112,6 +126,7 @@ functions:
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
         Resource: 
           - '*'
 
@@ -134,6 +149,7 @@ functions:
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
         Resource: 
           - '*'
 
@@ -152,7 +168,8 @@ functions:
       - Effect: Allow
         Action:
           - s3:*
-          - xray:PutTraceSegments 
+          - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
         Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET_NAME}/*
 
 resources:

@@ -17,9 +17,7 @@ provider:
   region: ${opt:region, 'us-east-1'}
 
 #  X-Ray Tracing
-  tracing: 
-    lambda: true
-    apiGateway: true
+  tracing: true
 
   environment:
     PROJECT_NAME: serverless-todo-app
@@ -67,6 +65,9 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:Query
+          - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
+
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
       - Effect: Allow
         Action:
@@ -94,6 +95,9 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:PutItem
+          - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
+
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
       - Effect: Allow
         Action:
@@ -122,6 +126,8 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:UpdateItem
+          - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
       - Effect: Allow
         Action:
@@ -145,6 +151,8 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:DeleteItem
+          - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
       - Effect: Allow
         Action:
